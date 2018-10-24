@@ -19,7 +19,12 @@ class Register extends Component {
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
-  
+
+  componentDidMount() {
+    if(this.props.auth.isAuthenticated){
+      this.props.history.push('/dashboard')
+    }
+  }
   componentWillReceiveProps(nextProps){
     if(nextProps.errors) {
       this.setState({ errors : nextProps.errors })
@@ -97,7 +102,7 @@ Register.propTypes = {
   errors: PropTypes.object.isRequired
 }
 
-const mapStateToProps = (state) => ({ 
+const mapStateToProps = (state) => ({
   auth: state.auth,
   errors: state.errors
 })
