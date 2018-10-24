@@ -8,6 +8,10 @@ const passport = require('passport')
 //Load User model
 const User = require('../../models/User')
 
+//Load input validation
+const validateRegisterInput = require('../../validations/register')
+const validateLoginInput = require('../../validations/login')
+
 // @route   GET api/users/test
 // @desc    Tests users route
 // @access  Public route
@@ -17,6 +21,13 @@ router.get('/test', (req, res) => res.json({msg: 'users works'}))
 // @desc    Register user
 // @access  Public route
 router.post('/register', (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body)
+
+  // Check Validation
+  if(!isValid) {
+    return res.status(400).json(errors)
+  }
+
   User
     .findOne({ email: req.body.mail })
     .then( user => {
@@ -52,6 +63,14 @@ router.post('/register', (req, res) => {
 // @desc    Login User / Returning JWT token
 // @access  Public route
 router.post('/login', (req, res) => {
+
+  const { errors, isValid } = validateLoginInput(req.body)
+
+  // Check Validation
+  if(!isValid) {
+    return res.status(400).json(errors)
+  }
+
   const email = req.body.email
   const password = req.body.password
 
@@ -61,7 +80,8 @@ router.post('/login', (req, res) => {
     .then(user => {
       //Check for user
       if(!user) {
-        res.status(404).json({ email: 'User email not found'})
+        errors.email = 'User not found'
+        res.status(404).json(errors)
       }
       //Check password
       bcrypt
@@ -88,7 +108,8 @@ router.post('/login', (req, res) => {
                   })
             })
           } else {
-              return res.status(400).json({password: 'password incorrect'})
+              errors.password = 'Password incorrect'
+              return res.status(400).json(errors)
             }
         })
     })
