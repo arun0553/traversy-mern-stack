@@ -10,6 +10,12 @@ import store from './store'
 
 import PrivateRoute from './components/common/PrivateRoute'
 
+import Profiles from './components/profiles/Profiles'
+import Profile from './components/profile/Profile'
+
+import Posts from './components/posts/Posts'
+import Post from './components/post/Post'
+
 import AddExperience from './components/add-credentials/AddExperience'
 import AddEducation from './components/add-credentials/AddEducation'
 
@@ -23,6 +29,8 @@ import Login from './components/auth/Login'
 import Dashboard from './components/dashboard/Dashboard'
 
 import './App.css'
+
+import NotFound from './components/not-found/NotFound'
 
 
 // Check for token
@@ -65,6 +73,8 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={ Register }></Route>
               <Route exact path="/login" component={ Login }></Route>
+              <Route exact path="/profiles" component={ Profiles }></Route>
+              <Route exact path="/profile/:handle" component={ Profile }></Route>
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={ Dashboard }></PrivateRoute>
               </Switch>
@@ -80,6 +90,13 @@ class App extends Component {
               <Switch>
                 <PrivateRoute exact path="/add-education" component={ AddEducation }></PrivateRoute>
               </Switch>
+              <Switch>
+                <PrivateRoute exact path="/feed" component={ Posts }></PrivateRoute>
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/post/:id" component={ Post }></PrivateRoute>
+              </Switch>
+              <Route exact path="/not-found" component={ NotFound }></Route>
             </div>
             <Footer />
           </div>
